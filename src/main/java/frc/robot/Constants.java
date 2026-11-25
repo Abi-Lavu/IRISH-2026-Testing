@@ -16,4 +16,32 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static class DriveConstants{
+    // public static final int frontLeftMotorID = 22;
+     // public static final int frontRightMotorID = 10;
+    // public static final int backLeftMotorID = 8;
+    // public static final int backRightMotorID = 1;
+    public static final int frontLeftMotorID = 
+    public static final int frontRightMotorID = 
+    public static final int backLeftMotorID = 
+    public static final int backRightMotorID = 
+
+    public static final boolean frontLeftInverted = false;
+    public static final boolean backLeftInverted = false;
+    public static final boolean backRightInverted = true;
+    public static final boolean frontRightInverted = true;
+
+    public static final double Deadband = 0.1;
+    public static final double MaxOutput = 0.8;
+    public static final double VoltageCompSaturation = 11.0;
+    public static final int CurrentLimitAmps = 40;
+    public static final double OpenLoopRampSeconds = 0.2;
+
+    /** Speed multiplier while the slow-mode button (left bumper) is held. */
+    public static final double SlowModeScale = 0.4;
+
+    /** A Talon hotter than this shows up in the drive health log. */
+    public static final double TooHotTempC = 60.0;
+  }
 }
