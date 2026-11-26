@@ -9,7 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * Simulation only: our practice field (from "Full Field Assembly" in Onshape) for the maple-sim
- * physics engine. One hub in the middle, the bump next to it (drivable, so not solid here), the
+ * physics engine. One hub in the middle, the bump next to it (solid: our robot can't cross it), the
  * trench on the other side, and 35 balls in each end's depot.
  *
  * Coordinates are WPILib's: meters from the blue corner, X toward red, Y to the left of the blue
@@ -27,6 +27,11 @@ public class PracticeFieldArena extends SimulatedArena {
     private static final double TRENCH_BASE_NEAR_Y = CENTER.getY() - 0.7493;
     private static final double TRENCH_BASE_FAR_Y = CENTER.getY() - 3.8681;
 
+    // Bump: our robot beaches on its 6.5 in ridge, so it's solid here (we always use the trench).
+    private static final double BUMP_X = 1.1276;
+    private static final double BUMP_Y = 3.429;
+    private static final double BUMP_CENTER_Y = CENTER.getY() + 2.3114;
+
     // Depots: 5 x 7 grid of balls at each end, 0.15 m apart (from the CAD).
     private static final double BALL_SPACING = 0.15;
     private static final double BLUE_DEPOT_X = 0.081;
@@ -36,7 +41,7 @@ public class PracticeFieldArena extends SimulatedArena {
     private final boolean ballsEnabled;
 
     /**
-     * @param fieldCollisions true: the hub and trench are solid. false: robot and balls pass
+     * @param fieldCollisions true: the hub, bump and trench are solid. false: robot and balls pass
      *     through them. The outside walls are always solid.
      * @param ballsEnabled true: balls are placed on the field and roll when hit. false: no balls.
      */
@@ -77,6 +82,7 @@ public class PracticeFieldArena extends SimulatedArena {
                 new Pose2d(CENTER.getX(), TRENCH_BASE_NEAR_Y, Rotation2d.kZero));
             addRectangularObstacle(TRENCH_BASE_X, TRENCH_BASE_Y,
                 new Pose2d(CENTER.getX(), TRENCH_BASE_FAR_Y, Rotation2d.kZero));
+            addRectangularObstacle(BUMP_X, BUMP_Y, new Pose2d(CENTER.getX(), BUMP_CENTER_Y, Rotation2d.kZero));
         }
     }
 }

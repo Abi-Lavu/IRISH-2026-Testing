@@ -30,7 +30,7 @@ public class RobotContainer {
     public static final boolean kSimBallsEnabled = true;
 
     /**
-     * true: the robot (and balls) bump into the hub and trench. false: they pass through them.
+     * true: the robot (and balls) bump into the hub, bump and trench. false: they pass through them.
      * The outside walls are always solid.
      */
     public static final boolean kSimFieldCollisions = true;
