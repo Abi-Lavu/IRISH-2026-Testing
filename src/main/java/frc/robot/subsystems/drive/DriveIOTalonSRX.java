@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 import frc.robot.Constants.DriveConstants;
 
-/** The real drivetrain: 4 CIMs on Talon SRX (Phoenix 5). Order everywhere is FL, FR, BL, BR. */
+
 public class DriveIOTalonSRX implements DriveIO {
     private final TalonSRX[] motors = {
         new TalonSRX(DriveConstants.frontLeftMotorID),
@@ -52,7 +52,6 @@ public class DriveIOTalonSRX implements DriveIO {
         for (int i = 0; i < motors.length; i++) {
             TalonSRX motor = motors[i];
             inputs.busVolts[i] = motor.getBusVoltage();
-            // getLastError() reports whether the read just above reached the Talon over CAN.
             inputs.connected[i] = motor.getLastError() == ErrorCode.OK;
             inputs.appliedPercent[i] = motor.getMotorOutputPercent();
             inputs.statorAmps[i] = motor.getStatorCurrent();
