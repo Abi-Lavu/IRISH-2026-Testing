@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -22,10 +25,10 @@ public final class Constants {
      // public static final int frontRightMotorID = 10;
     // public static final int backLeftMotorID = 8;
     // public static final int backRightMotorID = 1;
-    public static final int frontLeftMotorID = 
-    public static final int frontRightMotorID = 
-    public static final int backLeftMotorID = 
-    public static final int backRightMotorID = 
+    public static final int frontLeftMotorID = 22;
+    public static final int frontRightMotorID = 10;
+    public static final int backLeftMotorID = 8;
+    public static final int backRightMotorID = 1;
 
     public static final boolean frontLeftInverted = false;
     public static final boolean backLeftInverted = false;
@@ -43,5 +46,17 @@ public final class Constants {
 
     /** A Talon hotter than this shows up in the drive health log. */
     public static final double TooHotTempC = 60.0;
+
+    /** Simulation only (DriveIOSim). Wheel spacing measured from the CAD (Top Level Assembly). */
+    public static class DriveSimConstants {
+      /** Front-to-back distance between wheel centers. */
+      public static final double SimWheelbaseMeters = 0.54;
+      /** Left-to-right distance between wheel centers. */
+      public static final double SimTrackWidthMeters = 0.68;
+      /** Wheel surface speed at 100% output. CIM 5330 rpm / 10.71 ToughBox Micro x 6 in wheel = about 4 m/s free, minus losses. */
+      public static final double SimMaxWheelSpeedMetersPerSec = 3.5;
+      /** Where the fake robot starts on the field (meters from the blue corner, facing red). */
+      public static final Pose2d SimStartPose = new Pose2d(2.0, 4.0, Rotation2d.kZero);
+    }
   }
 }
