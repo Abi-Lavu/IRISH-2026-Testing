@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -16,10 +17,24 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveIO;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveIOTalonSRX;
 
 public class RobotContainer {
+    // ---------------------------------------------------------------------------------------------
+    // Simulation settings (ignored on the real robot)
+    // ---------------------------------------------------------------------------------------------
+
+    /** true: balls sit in both depots and roll when the robot hits them. false: no balls. */
+    public static final boolean kSimBallsEnabled = true;
+
+    /**
+     * true: the robot (and balls) bump into the hub and trench. false: they pass through them.
+     * The outside walls are always solid.
+     */
+    public static final boolean kSimFieldCollisions = true;
+
     private final CommandXboxController xbox =
         new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
@@ -27,7 +42,7 @@ public class RobotContainer {
     // WPILib wants forward, left and counterclockwise positive.
     private final Drive drive = new Drive(
         // Real Talons on the robot, the fake drivetrain in simulation.
-        RobotBase.isReal() ? new DriveIOTalonSRX() : new DriveIOSim(),
+        RobotBase.isReal() ? new DriveIOTalonSRX() : createSimDrive(),
         () -> -deadband(xbox.getLeftY()), // forward
         () -> -deadband(xbox.getLeftX()), // strafe left
         () -> -deadband(turnAxis())); // turn counterclockwise
@@ -42,6 +57,19 @@ public class RobotContainer {
         // In sim on a Mac the unmapped controller reports LB as button 7 instead of 5.
         (RobotBase.isSimulation() ? xbox.button(kSimLeftBumperButton) : xbox.leftBumper())
             .whileTrue(drive.slowMode());
+    }
+
+    /** Builds the simulated field (with the settings above), then puts the fake robot on it. */
+    private static DriveIO createSimDrive() {
+        SimulatedArena.overrideInstance(new PracticeFieldArena(kSimFieldCollisions, kSimBallsEnabled));
+        SimulatedArena.getInstance().resetFieldForAuto(); // places the balls
+        return new DriveIOSim();
+    }
+
+    /** Called from Robot.simulationPeriodic(): moves the physics forward and logs where the balls are. */
+    public void simulationPeriodic() {
+        SimulatedArena.getInstance().simulationPeriodic();
+        Logger.recordOutput("FieldSimulation/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
     }
 
     /** No autos yet: the robot sits still in autonomous. */

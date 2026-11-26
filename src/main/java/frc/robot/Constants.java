@@ -57,6 +57,13 @@ public final class Constants {
       public static final double SimMaxWheelSpeedMetersPerSec = 3.5;
       /** Where the fake robot starts on the field (meters from the blue corner, facing red). */
       public static final Pose2d SimStartPose = new Pose2d(2.0, 4.0, Rotation2d.kZero);
+      /** Robot weight with battery and bumpers, for the physics sim (pushing balls, hitting things). */
+      public static final double SimRobotMassKg = 52.0;
+      /** Outside size of the bumpers (front-to-back, side-to-side), from the robot CAD. */
+      public static final double SimBumperLengthMeters = 0.98;
+      public static final double SimBumperWidthMeters = 0.95;
+      /** How grippy the wheels are (mecanum on carpet is roughly 0.7). Limits how hard the robot can push. */
+      public static final double SimWheelGrip = 0.7;
     }
   }
 }

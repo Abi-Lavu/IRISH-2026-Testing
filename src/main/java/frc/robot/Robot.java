@@ -33,6 +33,12 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
   }
 
+  /** Runs only in simulation: steps the physics (robot, balls, field) and logs the balls. */
+  @Override
+  public void simulationPeriodic() {
+    m_robotContainer.simulationPeriodic();
+  }
+
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();

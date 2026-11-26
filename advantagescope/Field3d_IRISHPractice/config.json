@@ -1,0 +1,52 @@
+{
+  "name": "IRISH Practice Field",
+  "isFTC": false,
+  "coordinateSystem": "wall-blue",
+  "rotations": [
+    {
+      "axis": "z",
+      "degrees": 180
+    }
+  ],
+  "widthInches": 650.1,
+  "heightInches": 316.3,
+  "defaultOrigin": "blue",
+  "driverStations": [
+    [
+      8.9,
+      -3.08
+    ],
+    [
+      8.9,
+      -1.25
+    ],
+    [
+      8.9,
+      1.83
+    ],
+    [
+      -8.9,
+      3.08
+    ],
+    [
+      -8.9,
+      1.25
+    ],
+    [
+      -8.9,
+      -1.83
+    ]
+  ],
+  "gamePieces": [
+    {
+      "name": "Fuel",
+      "rotations": [],
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "stagedObjects": []
+    }
+  ]
+}
