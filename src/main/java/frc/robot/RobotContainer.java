@@ -16,23 +16,21 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveIO;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveIOTalonSRX;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.subsystems.vision.VisionIOSim;
 
 public class RobotContainer {
-    // ---------------------------------------------------------------------------------------------
-    // Simulation settings (ignored on the real robot)
-    // ---------------------------------------------------------------------------------------------
-
-    /** true: balls sit in both depots and roll when the robot hits them. false: no balls. */
+    
     public static final boolean kSimBallsEnabled = true;
 
-    /**
-     * true: the robot (and balls) bump into the hub, bump and trench. false: they pass through them.
-     * The outside walls are always solid.
-     */
+    
     public static final boolean kSimFieldCollisions = true;
 
     private final CommandXboxController xbox =
@@ -41,11 +39,17 @@ public class RobotContainer {
     // Xbox sticks are negative when pushed forward/left, so flip them.
     // WPILib wants forward, left and counterclockwise positive.
     private final Drive drive = new Drive(
-        // Real Talons on the robot, the fake drivetrain in simulation.
+       
         RobotBase.isReal() ? new DriveIOTalonSRX() : createSimDrive(),
         () -> -deadband(xbox.getLeftY()), // forward
         () -> -deadband(xbox.getLeftX()), // strafe left
         () -> -deadband(turnAxis())); // turn counterclockwise
+
+    // Real Limelight on the robot, a fake one in simulation that "sees" the hub tags from the sim pose.
+    private final Vision vision = new Vision(
+        RobotBase.isReal() ? new VisionIOLimelight(VisionConstants.LimelightName) : new VisionIOSim(drive::getSimPose));
+
+    private final Superstructure superstructure = new Superstructure(vision);
 
     public RobotContainer() {
         configureBindings();
@@ -53,7 +57,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // Left bumper (hold): slow mode.
+        
         // In sim on a Mac the unmapped controller reports LB as button 7 instead of 5.
         (RobotBase.isSimulation() ? xbox.button(kSimLeftBumperButton) : xbox.leftBumper())
             .whileTrue(drive.slowMode());

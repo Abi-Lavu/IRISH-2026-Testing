@@ -6,6 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -65,5 +68,40 @@ public final class Constants {
       /** How grippy the wheels are (mecanum on carpet is roughly 0.7). Limits how hard the robot can push. */
       public static final double SimWheelGrip = 0.7;
     }
+  }
+
+  public static class VisionConstants {
+    /** The Limelight's name in its web page (and its NetworkTables table). "limelight" is the default. */
+    public static final String LimelightName = "limelight";
+    /** Hub AprilTags on our field (IRISH manual 3.10: REBUILT tags 9, 10, 25, 26). */
+    public static final int[] HubTagIds = {9, 10, 25, 26};
+    /** No new camera frame for this long means the Limelight is disconnected. */
+    public static final double DisconnectedAfterSeconds = 0.5;
+
+    /** Simulation only (VisionIOSim). Made-up camera mount, only for the fake camera. The real robot never uses these. */
+    public static class VisionSimConstants {
+      /** Fake camera: robot center, 0.5 m up, tilted 20 degrees up (negative pitch is up in WPILib). */
+      public static final Transform3d SimRobotToCamera =
+          new Transform3d(new Translation3d(0.0, 0.0, 0.5), new Rotation3d(0.0, Math.toRadians(-20.0), 0.0));
+      /** Limelight 2 field of view. */
+      public static final double SimHorizontalFovDegrees = 59.6;
+      public static final double SimVerticalFovDegrees = 49.7;
+      /** Farther than this, the fake camera can't read a tag. */
+      public static final double SimMaxRangeMeters = 5.0;
+      /** A tag seen more edge-on than this can't be read. */
+      public static final double SimMaxViewAngleDegrees = 70.0;
+    }
+  }
+  public static class IntakeConstants{
+    public static final int dropdownMotor = 0;
+    public static final int intakeMotor = 0;
+  }
+
+  public static class ShooterConstants{
+    public static final int feederMotor = 0;
+    public static final int shooterMotor = 0;
+  }
+  public static class TransferConstants{
+    public static final int transferMotor = 0;
   }
 }
