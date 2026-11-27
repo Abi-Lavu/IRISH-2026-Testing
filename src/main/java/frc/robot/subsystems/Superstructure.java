@@ -11,6 +11,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.transfer.Transfer;
 
 
 public class Superstructure extends SubsystemBase {
@@ -19,44 +20,50 @@ public class Superstructure extends SubsystemBase {
         IDLE,
         DRIVING,
         INTAKING,
-        DASHBOARD,
-        SHOOTING,
+        REVERSE_INTAKE,
         REVUP,
+        PRE_SHOOT,
+        SHOOTING,
+        DASHBOARD
     }
 
     public enum SuperstructureCurrentState {
         IDLE,
         DRIVING,
         INTAKING,
-        DASHBOARD,
-        SHOOTING,
+        REVERSE_INTAKE,
         REVUP,
+        PRE_SHOOT,
+        SHOOTING,
+        DASHBOARD
     }
-
-    public SuperstructureWantedState wantedState = SuperstructureWantedState.DRIVING;
-    public SuperstructureCurrentState currentState = SuperstructureCurrentState.DRIVING;
-    private SuperstructureCurrentState previousCurrentState = SuperstructureCurrentState.DRIVING;
 
     private final Vision vision;
     private final Intake intake;
     private final Shooter shooter;
     private final Drive drive;
+    private final Transfer transfer;
+
+    public SuperstructureWantedState wantedState = SuperstructureWantedState.DRIVING;
+    public SuperstructureCurrentState currentState = SuperstructureCurrentState.DRIVING;
+    private SuperstructureCurrentState previousCurrentState = SuperstructureCurrentState.DRIVING;
 
     @AutoLog
     public static class SuperstructureInputs {
-        public String currentState = "DRIVING";
-        public String wantedState = "DRIVING";
-
-        
+        public String currentState = "IDLE";
+        public String wantedState = "IDLE";
         public double targetDistanceMeters = 0.0;
         public boolean hubVisible = false;
     }
 
     private final SuperstructureInputsAutoLogged superstructureInputs = new SuperstructureInputsAutoLogged();
 
-    public Superstructure(Vision vision, Intake intake, Shooter shooter, Drive drive) {
+    public Superstructure(Vision vision, Intake intake, Shooter shooter, Drive drive, Transfer transfer) {
         this.vision = vision;
         this.intake = intake;
+        this.shooter = shooter;
+        this.drive = drive;
+        this.transfer = transfer;
     }
 
     @Override
@@ -75,7 +82,6 @@ public class Superstructure extends SubsystemBase {
     }
 
     private void handleStates() {
-        previousCurrentState = currentState;
         switch (wantedState) {
             case IDLE:
                 currentState = SuperstructureCurrentState.IDLE;
@@ -86,14 +92,20 @@ public class Superstructure extends SubsystemBase {
             case INTAKING:
                 currentState = SuperstructureCurrentState.INTAKING;
                 break;
-            case DASHBOARD:
-                currentState = SuperstructureCurrentState.DASHBOARD;
+            case REVERSE_INTAKE:
+                currentState = SuperstructureCurrentState.REVERSE_INTAKE;
+                break;
+            case REVUP:
+                currentState = SuperstructureCurrentState.REVUP;
+                break;
+            case PRE_SHOOT:
+                currentState = SuperstructureCurrentState.PRE_SHOOT;
                 break;
             case SHOOTING:
                 currentState = SuperstructureCurrentState.SHOOTING;
                 break;
-            case REVUP:
-                currentState = SuperstructureCurrentState.REVUP;
+            case DASHBOARD:
+                currentState = SuperstructureCurrentState.DASHBOARD;
                 break;
         }
         if (currentState != previousCurrentState) {
@@ -109,11 +121,15 @@ public class Superstructure extends SubsystemBase {
                 break;
             case INTAKING:
                 break;
-            case DASHBOARD:
+            case REVERSE_INTAKE:
+                break;
+            case REVUP:
+                break;
+            case PRE_SHOOT:
                 break;
             case SHOOTING:  
                 break;
-            case REVUP:
+            case DASHBOARD:
                 break;
         }
     }
@@ -144,6 +160,12 @@ public class Superstructure extends SubsystemBase {
 
     public void requestRevUp() {
         wantedState = SuperstructureWantedState.REVUP;
+    }
+    public void requestPreShoot() {
+        wantedState = SuperstructureWantedState.PRE_SHOOT;
+    }
+    public void requestReverseIntake(){
+        wantedState = SuperstructureWantedState.REVERSE_INTAKE;
     }
 
     public Command setIdle() {
@@ -179,6 +201,16 @@ public class Superstructure extends SubsystemBase {
     public Command setRevUp() {
         return Commands.runOnce(() -> {
             requestRevUp();
+        });
+    }
+    public Command setPreShoot() {
+        return Commands.runOnce(() -> {
+            requestPreShoot();
+        });
+    }
+    public Command setReverseIntake() {
+        return Commands.runOnce(() -> {
+            requestReverseIntake();
         });
     }
 }
